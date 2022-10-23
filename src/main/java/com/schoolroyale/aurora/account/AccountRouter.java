@@ -1,6 +1,6 @@
 package com.schoolroyale.aurora.account;
 
-import com.schoolroyale.aurora.rol.Roles;
+import com.schoolroyale.aurora.auth.role.Roles;
 import com.schoolroyale.aurora.router.RouterHelper;
 import com.schoolroyale.aurora.schemas.account.Account;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/account")
+@PreAuthorize(Roles.USER)
 public class AccountRouter {
 
     private final AccountRepository repository;
@@ -40,9 +41,14 @@ public class AccountRouter {
     }
 
     @PutMapping("/update")
-    @PreAuthorize(Roles.ADMIN)
     public Mono<ResponseEntity<Account>> updateAccount(@RequestBody Account account) {
        return RouterHelper.okOrBadRequest(repository.save(account));
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize(Roles.ADMIN)
+    public Mono<ResponseEntity<String>> admin() {
+        return RouterHelper.okOrNotFound(Mono.just("Admin"));
     }
 
 }

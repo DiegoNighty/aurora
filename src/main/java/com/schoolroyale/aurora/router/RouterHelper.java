@@ -1,5 +1,6 @@
 package com.schoolroyale.aurora.router;
 
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,5 +24,8 @@ public class RouterHelper {
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.badRequest().build());
     }
+
+    public static final HttpStatusCode UNAUTHORIZED = HttpStatusCode.valueOf(401);
+    public static final HttpStatusCode ALREADY_EXISTS = HttpStatusCode.valueOf(409);
 
 }

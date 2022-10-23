@@ -3,6 +3,7 @@ package com.schoolroyale.aurora.auth;
 import com.schoolroyale.aurora.auth.message.AuthRequest;
 import com.schoolroyale.aurora.auth.role.Role;
 import com.schoolroyale.aurora.auth.role.Roles;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
+@Document("api-user")
 public record User(String username, String password, boolean enabled, Collection<Role> role) implements UserDetails {
 
     public static User from(AuthRequest request, PasswordEncoder encoder) {

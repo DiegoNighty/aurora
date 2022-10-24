@@ -5,6 +5,7 @@ import com.schoolroyale.aurora.router.RouterHelper;
 import com.schoolroyale.aurora.schemas.account.Account;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +29,11 @@ public class AccountRouter {
     @GetMapping("/search/name/{name}")
     public Mono<ResponseEntity<Account>> findByName(@PathVariable("name") String name) {
         return RouterHelper.okOrNotFound(repository.findAccountByCredentialUsername(name));
+    }
+
+    @GetMapping("/me")
+    public Mono<ResponseEntity<Account>> findMe(@AuthenticationPrincipal String username) {
+        return RouterHelper.okOrNotFound(repository.findAccountByCredentialUsername(username));
     }
 
     @GetMapping("/search/mail/{mail}")

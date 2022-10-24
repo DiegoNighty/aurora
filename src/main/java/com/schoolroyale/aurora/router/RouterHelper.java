@@ -20,5 +20,6 @@ public class RouterHelper {
 
     public static final HttpStatusCode UNAUTHORIZED = HttpStatusCode.valueOf(401);
     public static final HttpStatusCode ALREADY_EXISTS = HttpStatusCode.valueOf(409);
+    public static final HttpStatusCode RATE_LIMIT = HttpStatusCode.valueOf(429);
 
 }

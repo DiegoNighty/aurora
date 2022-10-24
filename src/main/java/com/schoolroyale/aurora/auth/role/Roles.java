@@ -12,4 +12,11 @@ public class Roles {
         return List.of(Role.ROLE_USER);
     }
 
+    public static Role maxRoleFromAuthorities(Collection<String> authorities) {
+        return authorities.stream()
+                .map(Role::valueOf)
+                .max(Role.comparator())
+                .orElse(Role.ROLE_USER);
+    }
+
 }

@@ -12,10 +12,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collection;
 
 @Document("api-user")
-public record User(String username, String password, boolean enabled, Collection<Role> role) implements UserDetails {
+public record User(
+        String username,
+        String password,
+        boolean enabled,
+        Collection<Role> role
+) implements UserDetails {
 
     public static User from(AuthRequest request, PasswordEncoder encoder) {
         return new User(request.username(), encoder.encode(request.password()), true, Roles.forNewUser());
+    }
+
+    public Role maxRole() {
+        return role.stream()
+                .max(Role.comparator())
+                .orElse(Role.ROLE_USER);
     }
 
     @Override

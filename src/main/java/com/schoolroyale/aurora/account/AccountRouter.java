@@ -36,19 +36,14 @@ public class AccountRouter {
     }
 
     @GetMapping("/search/address/{address}")
-    public Flux<ResponseEntity<Account>> findByAddress(@PathVariable("address") String address) {
-        return RouterHelper.okOrNotFound(repository.findAccountsBySessionAddressesNumber(address));
+    public Flux<Account> findByAddress(@PathVariable("address") String address) {
+        return repository.findAllBySessionAddressesNumber(address);
     }
 
     @PutMapping("/update")
+    @PreAuthorize(Roles.ADMIN)
     public Mono<ResponseEntity<Account>> updateAccount(@RequestBody Account account) {
        return RouterHelper.okOrBadRequest(repository.save(account));
-    }
-
-    @GetMapping("/admin")
-    @PreAuthorize(Roles.ADMIN)
-    public Mono<ResponseEntity<String>> admin() {
-        return RouterHelper.okOrNotFound(Mono.just("Admin"));
     }
 
 }

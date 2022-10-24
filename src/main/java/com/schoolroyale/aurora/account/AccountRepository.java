@@ -11,6 +11,6 @@ public interface AccountRepository extends ReactiveMongoRepository<Account, Stri
 
     Mono<Account> findAccountByCredentialMailsAddress(String mail);
 
-    Flux<Account> findAccountsBySessionAddressesNumber(String number);
+    Flux<Account> findAllBySessionAddressesNumber(String address);
 
 }

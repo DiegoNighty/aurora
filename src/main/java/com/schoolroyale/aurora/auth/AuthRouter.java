@@ -11,11 +11,11 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthRoute {
+public class AuthRouter {
 
     private final AuthService authService;
 
-    public AuthRoute(AuthService authService) {
+    public AuthRouter(AuthService authService) {
         this.authService = authService;
     }
 

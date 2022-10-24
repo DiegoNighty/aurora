@@ -1,6 +1,7 @@
 package com.schoolroyale.aurora.auth.security;
 
 import com.schoolroyale.aurora.auth.AuthTokenManager;
+import com.schoolroyale.aurora.auth.token.TokenExtractor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,9 +27,9 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                         .getHeaders()
                         .getFirst(HttpHeaders.AUTHORIZATION)
                 )
-                .filter(authHeader -> authHeader.startsWith("Bearer "))
+                .filter(TokenExtractor::isToken)
                 .flatMap(authHeader -> {
-                    var authToken = authHeader.substring(7);
+                    var authToken = TokenExtractor.extract(authHeader);
                     var auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
 
                     return authTokenManager.authenticate(auth)

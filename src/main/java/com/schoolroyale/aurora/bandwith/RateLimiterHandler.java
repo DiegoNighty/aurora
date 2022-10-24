@@ -1,9 +1,9 @@
 package com.schoolroyale.aurora.bandwith;
 
 import com.schoolroyale.aurora.auth.role.Roles;
+import com.schoolroyale.aurora.auth.token.TokenExtractor;
 import com.schoolroyale.aurora.auth.token.TokenService;
 import com.schoolroyale.aurora.router.RouterHelper;
-import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -19,8 +19,6 @@ public class RateLimiterHandler implements WebFilter {
     private final RateLimiterService rateLimiterService;
     private final TokenService tokenService;
 
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(RateLimiterHandler.class);
-
     public RateLimiterHandler(RateLimiterService rateLimiterService, TokenService tokenService) {
         this.rateLimiterService = rateLimiterService;
         this.tokenService = tokenService;
@@ -32,11 +30,11 @@ public class RateLimiterHandler implements WebFilter {
                 .getHeaders()
                 .getFirst(HttpHeaders.AUTHORIZATION);
 
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (header == null || !TokenExtractor.isToken(header)) {
             return chain.filter(exchange);
         }
 
-        var token = header.substring(7);
+        var token = TokenExtractor.extract(header);
 
         var username = tokenService.usernameFromToken(token);
         var maxRole = Roles.maxRoleFromAuthorities(rolesFromToken(token));

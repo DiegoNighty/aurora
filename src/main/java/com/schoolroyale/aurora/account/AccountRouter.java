@@ -1,5 +1,6 @@
 package com.schoolroyale.aurora.account;
 
+import com.schoolroyale.aurora.auth.User;
 import com.schoolroyale.aurora.auth.role.Roles;
 import com.schoolroyale.aurora.router.RouterHelper;
 import com.schoolroyale.aurora.schemas.account.Account;
@@ -32,8 +33,8 @@ public class AccountRouter {
     }
 
     @GetMapping("/me")
-    public Mono<ResponseEntity<Account>> findMe(@AuthenticationPrincipal String username) {
-        return RouterHelper.okOrNotFound(repository.findAccountByCredentialUsername(username));
+    public Mono<ResponseEntity<Account>> findMe(@AuthenticationPrincipal User user) {
+        return RouterHelper.okOrNotFound(repository.findAccountByCredentialUsername(user.username()));
     }
 
     @GetMapping("/search/mail/{mail}")

@@ -16,6 +16,11 @@ public class AccountCredential {
         this.mails = mails;
     }
 
+    public AccountCredential addMail(String mail) {
+        mails.add(new AccountMail(mail, mails.isEmpty()));
+        return this;
+    }
+
     public String getUsername() {
         return username;
     }

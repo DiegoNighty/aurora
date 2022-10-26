@@ -67,7 +67,7 @@ public class TokenService {
     }
 
     public boolean validateToken(String token) {
-        return !isTokenExpired(token);
+        return !isTokenExpired(token) /* && !isTokenBlackListed(token)? */;
     }
 
 }

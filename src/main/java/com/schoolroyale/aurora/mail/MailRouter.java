@@ -28,7 +28,7 @@ public class MailRouter {
         this.service = service;
     }
 
-    @GetMapping("/request/verification")
+    @GetMapping("/add")
     public Mono<ResponseEntity<RequestVerificationResponse>> requestVerification(
             @RequestParam("mail") String mail,
             @AuthenticationPrincipal User user

@@ -2,7 +2,6 @@ package com.schoolroyale.aurora.auth.user;
 
 import com.schoolroyale.aurora.auth.message.AuthRequest;
 import com.schoolroyale.aurora.auth.role.Role;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Slf4j
 @Document("api-user")
 public record ApiUser(
         String username,

@@ -16,6 +16,10 @@ import reactor.core.publisher.Mono;
 @EnableReactiveMethodSecurity
 public class SecurityConfiguration {
 
+    private final static String[] AUTH_ENDPOINTS = {
+            "/api/auth/login", "/api/auth/register"
+    };
+
     private final AuthTokenManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
 
@@ -41,7 +45,7 @@ public class SecurityConfiguration {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .pathMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .pathMatchers(AUTH_ENDPOINTS).permitAll()
                 .anyExchange()
                 .authenticated()
                 .and()

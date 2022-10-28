@@ -45,7 +45,7 @@ public class TokenService {
     }
 
     private boolean isTokenExpired(String token) {
-        return getExpirationDateFromToken(token).before(new Date());
+        return getExpirationDateFromToken(token).before(Time.now());
     }
 
     public String createToken(ApiUser apiUser) {

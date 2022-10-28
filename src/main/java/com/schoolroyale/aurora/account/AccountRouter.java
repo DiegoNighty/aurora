@@ -1,11 +1,11 @@
 package com.schoolroyale.aurora.account;
 
-import com.schoolroyale.aurora.auth.ApiUser;
 import com.schoolroyale.aurora.auth.role.Roles;
+import com.schoolroyale.aurora.auth.user.ApiUser;
 import com.schoolroyale.aurora.router.RouterHelper;
 import com.schoolroyale.aurora.schemas.account.Account;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/account")
-@PreAuthorize(Roles.USER)
+@Roles.IsUser
 public class AccountRouter {
 
     private final AccountRepository repository;
@@ -34,7 +35,7 @@ public class AccountRouter {
 
     @GetMapping("/me")
     public Mono<ResponseEntity<Account>> findMe(@AuthenticationPrincipal ApiUser apiUser) {
-        return RouterHelper.okOrNotFound(repository.findAccountByCredentialUsername(apiUser.username()));
+        return RouterHelper.okOrNotFound(repository.findById(apiUser.minecraftAccountId()));
     }
 
     @GetMapping("/search/mail/{mail}")
@@ -48,7 +49,7 @@ public class AccountRouter {
     }
 
     @PutMapping("/update")
-    @PreAuthorize(Roles.ADMIN)
+    @Roles.IsAdmin
     public Mono<ResponseEntity<Account>> updateAccount(@RequestBody Account account) {
        return RouterHelper.okOrBadRequest(repository.save(account));
     }

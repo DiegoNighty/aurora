@@ -1,13 +1,12 @@
 package com.schoolroyale.aurora.mail;
 
 import com.schoolroyale.aurora.account.AccountRepository;
-import com.schoolroyale.aurora.auth.ApiUser;
 import com.schoolroyale.aurora.auth.role.Roles;
+import com.schoolroyale.aurora.auth.user.ApiUser;
 import com.schoolroyale.aurora.mail.message.MailResponse;
 import com.schoolroyale.aurora.mail.message.RequestVerificationResponse;
 import com.schoolroyale.aurora.router.RouterHelper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/mail")
-@PreAuthorize(Roles.USER)
+@Roles.IsUser
 public class MailRouter {
 
     private final AccountRepository repository;

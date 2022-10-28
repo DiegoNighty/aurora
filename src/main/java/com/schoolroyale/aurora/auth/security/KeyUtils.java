@@ -1,5 +1,6 @@
 package com.schoolroyale.aurora.auth.security;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -21,8 +22,9 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
 
-@Component
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class KeyUtils {
 
     private final Environment environment;
@@ -41,10 +43,6 @@ public class KeyUtils {
 
     private KeyPair _accessTokenKeyPair;
     private KeyPair _refreshTokenKeyPair;
-
-    public KeyUtils(Environment environment) {
-        this.environment = environment;
-    }
 
     private KeyPair getAccessTokenKeyPair() {
         if (Objects.isNull(_accessTokenKeyPair)) {

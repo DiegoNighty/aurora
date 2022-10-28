@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.schoolroyale.aurora.auth.user.ApiUserManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.server.resource.web.server.BearerToke
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableReactiveMethodSecurity
 public class WebSecurity {
 
@@ -33,12 +35,6 @@ public class WebSecurity {
     private final JwtToUserConverter reactiveConverter;
     private final KeyUtils keyUtils;
     private final ApiUserManager apiUserManager;
-
-    public WebSecurity(JwtToUserConverter jwtToUserConverter, KeyUtils keyUtils, ApiUserManager apiUserManager) {
-        this.reactiveConverter = jwtToUserConverter;
-        this.keyUtils = keyUtils;
-        this.apiUserManager = apiUserManager;
-    }
 
     @Bean
     public SecurityWebFilterChain provideSecurityFilter(ServerHttpSecurity http) {

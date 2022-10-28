@@ -4,6 +4,7 @@ import com.schoolroyale.aurora.auth.role.Roles;
 import com.schoolroyale.aurora.auth.user.ApiUser;
 import com.schoolroyale.aurora.router.RouterHelper;
 import com.schoolroyale.aurora.schemas.account.Account;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,16 +18,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-@RestController
-@RequestMapping("/api/account")
 @Roles.IsUser
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/account")
 public class AccountRouter {
 
     private final AccountRepository repository;
-
-    public AccountRouter(AccountRepository repository) {
-        this.repository = repository;
-    }
 
     @GetMapping("/search/name/{name}")
     public Mono<ResponseEntity<Account>> findByName(@PathVariable("name") String name) {

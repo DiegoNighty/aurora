@@ -3,6 +3,7 @@ package com.schoolroyale.aurora.auth.token;
 import com.schoolroyale.aurora.auth.message.TokenResponse;
 import com.schoolroyale.aurora.auth.user.ApiUser;
 import com.schoolroyale.aurora.time.Time;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,24 +18,17 @@ import java.text.MessageFormat;
 import java.time.Duration;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService {
 
     private @Value("${aurora.jwt.issuer}") String issuer;
 
     private final JwtEncoder accessTokenEncoder;
-    private final JwtEncoder refreshTokenEncoder;
+    private final @Qualifier("refreshTokenEncoder") JwtEncoder refreshTokenEncoder;
 
     private @Value("${aurora.jwt.access-token-expiration}") long accessTokenExpiration;
     private @Value("${aurora.jwt.refresh-token-expiration}") long refreshTokenExpiration;
     private @Value("${aurora.jwt.refresh-when-expiration-left}") long refreshWhenExpirationLeft;
-
-    public TokenService(
-            JwtEncoder accessTokenEncoder,
-            @Qualifier("refreshTokenEncoder") JwtEncoder refreshTokenEncoder
-    ) {
-        this.accessTokenEncoder = accessTokenEncoder;
-        this.refreshTokenEncoder = refreshTokenEncoder;
-    }
 
     public TokenResponse createToken(Authentication auth) {
         if (!(auth.getPrincipal() instanceof ApiUser user)) {

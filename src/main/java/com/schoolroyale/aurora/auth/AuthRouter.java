@@ -4,6 +4,7 @@ import com.schoolroyale.aurora.auth.message.AuthRequest;
 import com.schoolroyale.aurora.auth.message.AuthResponse;
 import com.schoolroyale.aurora.auth.message.TokenRequest;
 import com.schoolroyale.aurora.auth.message.TokenResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,14 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthRouter {
 
     private final AuthRouterResolver resolver;
-
-    public AuthRouter(AuthRouterResolver resolver) {
-        this.resolver = resolver;
-    }
 
     @PostMapping("/register")
     public Mono<ResponseEntity<AuthResponse>> register(@RequestBody AuthRequest request) {

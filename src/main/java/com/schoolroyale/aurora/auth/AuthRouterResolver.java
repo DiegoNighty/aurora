@@ -11,7 +11,7 @@ import com.schoolroyale.aurora.auth.token.TokenService;
 import com.schoolroyale.aurora.auth.user.ApiUser;
 import com.schoolroyale.aurora.auth.user.ApiUserRepository;
 import com.schoolroyale.aurora.router.RouterHelper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
@@ -24,7 +24,7 @@ import reactor.util.function.Tuple2;
 
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthRouterResolver {
 
     private final PasswordEncoder passwordEncoder;

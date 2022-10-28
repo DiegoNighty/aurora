@@ -23,8 +23,8 @@ public class ApiUserManager implements ReactiveUserDetailsService, ReactiveUserD
 
     @Override
     public Mono<UserDetails> updatePassword(UserDetails user, String newPassword) {
-        var apiUser = (ApiUser) user;
-        ((ApiUser) user).setPassword(passwordEncoder.encode(newPassword));
+        var apiUser = ((ApiUser) user)
+                .changePassword(newPassword, passwordEncoder);
 
         return userRepository.save(apiUser)
                 .map(ApiUser::toUserDetails);

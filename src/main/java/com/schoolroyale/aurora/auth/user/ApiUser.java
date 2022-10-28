@@ -2,8 +2,6 @@ package com.schoolroyale.aurora.auth.user;
 
 import com.schoolroyale.aurora.auth.message.AuthRequest;
 import com.schoolroyale.aurora.auth.role.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,23 +12,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+
 @Slf4j
 @Document("api-user")
-public final class ApiUser implements UserDetails {
-
-    @Serial private static final long serialVersionUID = 0L;
-
-    private String username;
-    private String password;
-    private String minecraftAccountId;
-
-    private Collection<String> role;
+public record ApiUser(
+        String username,
+        String password,
+        String minecraftAccountId,
+        Collection<String> role
+) implements UserDetails {
 
     public static ApiUser from(AuthRequest request, PasswordEncoder passwordEncoder, Role defaultRole) {
         return new ApiUser(
@@ -87,24 +80,17 @@ public final class ApiUser implements UserDetails {
         return true;
     }
 
-    public String username() {
-        return username;
-    }
-
-    public String password() {
-        return password;
-    }
-
-    public String minecraftAccountId() {
-        return minecraftAccountId;
-    }
-
-    public Collection<String> role() {
-        return role;
-    }
-
     public UserDetails toUserDetails() {
         return this;
+    }
+
+    public ApiUser changePassword(String newPassword, PasswordEncoder passwordEncoder) {
+        return new ApiUser(
+                username,
+                passwordEncoder.encode(newPassword),
+                minecraftAccountId,
+                role
+        );
     }
 
     public Authentication authentication() {

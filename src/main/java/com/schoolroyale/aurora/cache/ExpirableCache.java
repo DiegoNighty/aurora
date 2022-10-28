@@ -1,24 +1,17 @@
 package com.schoolroyale.aurora.cache;
 
 import com.schoolroyale.aurora.time.Expirable;
+import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 
+@RequiredArgsConstructor(staticName = "of")
 public class ExpirableCache<K, V> implements Cache<K, V> {
 
     private final Map<K, Expirable<V>> cache;
     private final Duration expiration;
-
-    public static <K, V> ExpirableCache<K, V> of(Map<K, Expirable<V>> cache, Duration expiration) {
-        return new ExpirableCache<>(cache, expiration);
-    }
-
-    public ExpirableCache(Map<K, Expirable<V>> cache, Duration expiration) {
-        this.cache = cache;
-        this.expiration = expiration;
-    }
 
     @Override
     public Optional<V> get(K key) {

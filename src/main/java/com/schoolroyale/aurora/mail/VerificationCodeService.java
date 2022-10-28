@@ -1,13 +1,12 @@
 package com.schoolroyale.aurora.mail;
 
-import com.schoolroyale.aurora.auth.ApiUser;
+import com.schoolroyale.aurora.auth.user.ApiUser;
 import com.schoolroyale.aurora.cache.Cache;
 import com.schoolroyale.aurora.cache.ExpirableCache;
 import com.schoolroyale.aurora.mail.message.MailResponse;
 import com.schoolroyale.aurora.time.Expirable;
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class VerificationCodeService {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(VerificationCodeService.class);
-    private @Value("${aurora.mail.code.expirationMinutes}") long expirationMinutes;
+    private @Value("${aurora.mail-code-expiration}") long expirationMinutes;
 
     private final Map<String, String> pendingMails = new HashMap<>();
     private Cache<String, String> codes;
@@ -35,7 +34,7 @@ public class VerificationCodeService {
 
         codes.put(code, mail);
         pendingMails.put(apiUser.username(), mail);
-        LOGGER.info("Verification code {} requested for {}", code, mail);
+        log.info("Verification code {} requested for {}", code, mail);
     }
 
     public MailResponse verifyCode(ApiUser apiUser, String code) {

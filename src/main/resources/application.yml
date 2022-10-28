@@ -1,0 +1,24 @@
+server:
+    port: 8082
+    error:
+        include-message: always
+spring:
+    data:
+        mongodb:
+            uri: mongodb+srv://DiegoNighty2:ZqhyTF119pKa6NOe@dieg0cluster.qgsl4.mongodb.net/?retryWrites=true&w=majority
+            database: aurora
+aurora:
+    mail-code-expiration: 10
+    jwt:
+        issuer: aurora
+        access-token-private-path: "access-refresh-token-keys/access-token-private.key"
+        access-token-public-path: "access-refresh-token-keys/access-token-public.key"
+        refresh-token-private-path: "access-refresh-token-keys/refresh-token-private.key"
+        refresh-token-public-path: "access-refresh-token-keys/refresh-token-public.key"
+#in days
+#accessTokenExpiration = 1 day
+#refreshTokenExpiration = 1 month
+#refreshWhenExpirationLeft = 7 days | Refresh the token when the expiration is less than 7 days
+        access-token-expiration: 86400
+        refresh-token-expiration: 2592000
+        refresh-when-expiration-left: 604800

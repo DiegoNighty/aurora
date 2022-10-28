@@ -1,22 +1,28 @@
 package com.schoolroyale.aurora.auth.role;
 
-import java.util.Collection;
-import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
-public class Roles {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public static final String ADMIN = "hasRole('ADMIN')";
-    public static final String USER = "hasRole('USER')";
+public interface Roles {
 
-    public static Collection<Role> forNewUser() {
-        return List.of(Role.ROLE_USER);
+    @Target({ElementType.METHOD, ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @PreAuthorize("hasRole('USER')")
+    @interface IsUser {
+
     }
 
-    public static Role maxRoleFromAuthorities(Collection<String> authorities) {
-        return authorities.stream()
-                .map(Role::valueOf)
-                .max(Role.comparator())
-                .orElse(Role.ROLE_USER);
+    @Target({ElementType.METHOD, ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @PreAuthorize("hasRole('ADMIN')")
+    @interface IsAdmin {
+
     }
+
+    String DEFAULT_NAME = "ROLE_USER";
 
 }

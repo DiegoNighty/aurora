@@ -1,15 +1,17 @@
 package com.schoolroyale.aurora.auth.message;
 
-public record AuthResponse(String token, String message) {
+public record AuthResponse(String message, TokenResponse token) {
 
-    public static final String SUCCESS_MESSAGE = "Login successful";
+      public static AuthResponse from(String message) {
+          return new AuthResponse(message, null);
+      }
 
-    public static AuthResponse success(String token) {
-        return new AuthResponse(token, SUCCESS_MESSAGE);
-    }
+      public static AuthResponse from(String message, TokenResponse token) {
+          return new AuthResponse(message, token);
+      }
 
-    public static AuthResponse error(String message) {
-        return new AuthResponse(null, message);
-    }
+      public static AuthResponse from(TokenResponse token) {
+          return new AuthResponse("Successfully logged in", token);
+      }
 
 }

@@ -1,16 +1,20 @@
 package com.schoolroyale.aurora.time;
 
 import java.time.Duration;
-import java.util.Date;
+import java.time.Instant;
 
 public class Time {
 
-    public static Date now() {
-        return new Date();
+    public static Instant now() {
+        return Instant.now();
     }
 
-    public static Date when(Duration duration) {
-        return new Date(now().getTime() + duration.toMillis());
+    public static Instant when(Duration duration) {
+        return Instant.now().plus(duration);
+    }
+
+    public static Duration between(Instant end) {
+        return Duration.between(Time.now(), end);
     }
 
 }

@@ -1,11 +1,11 @@
 package com.schoolroyale.aurora.time;
 
 import java.time.Duration;
-import java.util.Date;
+import java.time.Instant;
 
 public class Expirable<V> {
 
-    private final Date expirationDate;
+    private final Instant expirationDate;
     private final V value;
 
     public Expirable(V value, Duration duration) {
@@ -18,11 +18,11 @@ public class Expirable<V> {
     }
 
     public boolean isExpired() {
-        return expirationDate.before(new Date());
+        return expirationDate.isBefore(Time.now());
     }
 
-    public long getTimeLeft() {
-        return expirationDate.getTime() - System.currentTimeMillis();
+    public Duration getTimeLeft() {
+        return Time.between(expirationDate);
     }
 
     public static <V> Expirable<V> of(V value, Duration duration) {

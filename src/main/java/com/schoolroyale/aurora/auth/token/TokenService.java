@@ -1,6 +1,7 @@
 package com.schoolroyale.aurora.auth.token;
 
-import com.schoolroyale.aurora.auth.User;
+import com.schoolroyale.aurora.auth.ApiUser;
+import com.schoolroyale.aurora.time.Time;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,16 +48,16 @@ public class TokenService {
         return getExpirationDateFromToken(token).before(new Date());
     }
 
-    public String createToken(User user) {
+    public String createToken(ApiUser apiUser) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.role());
+        claims.put("role", apiUser.role());
 
-        return doGenerateToken(claims, user.username());
+        return doGenerateToken(claims, apiUser.username());
     }
 
     private String doGenerateToken(Map<String, Object> claims, String username) {
-        var createdDate = new Date();
-        var expirationDate = new Date(createdDate.getTime() + expiration);
+        var createdDate = Time.now();
+        var expirationDate = Time.when(Duration.ofMillis(expiration));
 
         return Jwts.builder()
                 .setClaims(claims)

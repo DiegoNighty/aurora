@@ -1,7 +1,7 @@
 package com.schoolroyale.aurora.mail;
 
 import com.schoolroyale.aurora.account.AccountRepository;
-import com.schoolroyale.aurora.auth.User;
+import com.schoolroyale.aurora.auth.ApiUser;
 import com.schoolroyale.aurora.auth.role.Roles;
 import com.schoolroyale.aurora.mail.message.MailResponse;
 import com.schoolroyale.aurora.mail.message.RequestVerificationResponse;
@@ -31,7 +31,7 @@ public class MailRouter {
     @GetMapping("/add")
     public Mono<ResponseEntity<RequestVerificationResponse>> requestVerification(
             @RequestParam("mail") String mail,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal ApiUser apiUser
     ) {
         return repository.findAccountByCredentialMailsAddress(mail)
                 .map(alreadyMail ->
@@ -39,7 +39,7 @@ public class MailRouter {
                                 .body(RequestVerificationResponse.from("Email already linked with another account"))
                 )
                 .switchIfEmpty(
-                        Mono.fromRunnable(() -> service.requestVerification(mail, user))
+                        Mono.fromRunnable(() -> service.requestVerification(mail, apiUser))
                                 .thenReturn(ResponseEntity.ok(RequestVerificationResponse.from("Verification code sent")))
                 );
     }
@@ -47,15 +47,15 @@ public class MailRouter {
     @GetMapping("/verify")
     public Mono<ResponseEntity<MailResponse>> verify(
             @RequestParam("code") String code,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal ApiUser apiUser
     ) {
-        MailResponse response = service.verifyCode(user, code);
+        MailResponse response = service.verifyCode(apiUser, code);
 
         if (!response.success()) {
             return Mono.just(from(response));
         }
 
-        return repository.findAccountByCredentialUsername(user.username())
+        return repository.findAccountByCredentialUsername(apiUser.username())
                 .flatMap(account -> {
                     account.credential()
                             .addMail(response.mail());

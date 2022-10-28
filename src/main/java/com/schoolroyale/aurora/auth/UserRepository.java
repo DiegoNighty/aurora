@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Mono;
 
 @Cacheable("api-users")
-public interface UserRepository extends ReactiveMongoRepository<User, String> {
+public interface UserRepository extends ReactiveMongoRepository<ApiUser, String> {
 
-    Mono<User> findByUsername(String username);
+    Mono<ApiUser> findByUsername(String username);
 
 }

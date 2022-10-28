@@ -1,6 +1,6 @@
 package com.schoolroyale.aurora.mail;
 
-import com.schoolroyale.aurora.auth.User;
+import com.schoolroyale.aurora.auth.ApiUser;
 import com.schoolroyale.aurora.cache.Cache;
 import com.schoolroyale.aurora.cache.ExpirableCache;
 import com.schoolroyale.aurora.mail.message.MailResponse;
@@ -30,16 +30,16 @@ public class VerificationCodeService {
         codes = ExpirableCache.of(new HashMap<>(), Duration.ofMinutes(expirationMinutes));
     }
 
-    public void requestVerification(String mail, User user) {
+    public void requestVerification(String mail, ApiUser apiUser) {
         String code = CodeGenerator.generate();
 
         codes.put(code, mail);
-        pendingMails.put(user.username(), mail);
+        pendingMails.put(apiUser.username(), mail);
         LOGGER.info("Verification code {} requested for {}", code, mail);
     }
 
-    public MailResponse verifyCode(User user, String code) {
-        String pendingMail = pendingMails.get(user.username());
+    public MailResponse verifyCode(ApiUser apiUser, String code) {
+        String pendingMail = pendingMails.get(apiUser.username());
 
         if (pendingMail == null) {
             return MailResponse.error("No pending verification");
@@ -54,7 +54,7 @@ public class VerificationCodeService {
         Expirable<String> expirableMail = optionalMail.get();
 
         if (expirableMail.isExpired()) {
-            clear(user, code);
+            clear(apiUser, code);
             return MailResponse.error("Code expired");
         }
 
@@ -64,13 +64,13 @@ public class VerificationCodeService {
             return MailResponse.error("Invalid code");
         }
 
-        clear(user, code);
+        clear(apiUser, code);
 
         return MailResponse.success("Code verified", mail);
     }
 
-    private void clear(User user, String code) {
-        pendingMails.remove(user.username());
+    private void clear(ApiUser apiUser, String code) {
+        pendingMails.remove(apiUser.username());
         codes.asMap().remove(code);
     }
 

@@ -38,7 +38,7 @@ public class AuthService {
         return userRepository.findByUsername(request.username())
                 .map(user -> ResponseEntity.status(RouterHelper.ALREADY_EXISTS).body(AuthResponse.error("User already exists")))
                 .switchIfEmpty(
-                        userRepository.save(User.from(request, passwordEncoder))
+                        userRepository.save(ApiUser.from(request, passwordEncoder))
                                 .map(user -> ResponseEntity.ok(AuthResponse.success(tokenService.createToken(user))))
                 );
     }

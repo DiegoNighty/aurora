@@ -12,15 +12,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collection;
 
 @Document("api-user")
-public record User(
+public record ApiUser(
         String username,
         String password,
+        String minecraftAccountId,
         boolean enabled,
         Collection<Role> role
 ) implements UserDetails {
 
-    public static User from(AuthRequest request, PasswordEncoder encoder) {
-        return new User(request.username(), encoder.encode(request.password()), true, Roles.forNewUser());
+    public static ApiUser from(AuthRequest request, PasswordEncoder encoder) {
+        return new ApiUser(
+                request.username(),
+                encoder.encode(request.password()),
+                request.minecraftAccountId(),
+                true,
+                Roles.forNewUser()
+        );
     }
 
     public Role maxRole() {

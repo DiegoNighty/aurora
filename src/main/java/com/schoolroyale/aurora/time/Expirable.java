@@ -10,7 +10,7 @@ public class Expirable<V> {
 
     public Expirable(V value, Duration duration) {
         this.value = value;
-        this.expirationDate = new Date(System.currentTimeMillis() + duration.toMillis());
+        this.expirationDate = Time.when(duration);
     }
 
     public V getValue() {

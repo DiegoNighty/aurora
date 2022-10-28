@@ -49,7 +49,7 @@ public class TokenService {
     }
 
     public String createToken(ApiUser apiUser) {
-        Map<String, Object> claims = new HashMap<>();
+        var claims = new HashMap<String, Object>();
         claims.put("role", apiUser.role());
 
         return doGenerateToken(claims, apiUser.username());

@@ -78,8 +78,8 @@ public class TokenService {
         var user = (ApiUser) authentication.getPrincipal();
 
         return JwtClaimsSet.builder()
-                .claim("role", user.getRole())
-                .claim("minecraftAccountId", user.getMinecraftAccountId())
+                .claim("role", user.role())
+                .claim("minecraftAccountId", user.minecraftAccountId())
                 .claim("password", user.getPassword())
                 .issuer(issuer)
                 .issuedAt(Time.now())

@@ -3,9 +3,23 @@ server:
     error:
         include-message: always
 spring:
+    mail:
+        sender: ${MAIL_USERNAME}
+        host: smtp.gmail.com
+        port: 587
+        username: ${MAIL_USERNAME}
+        password: ${MAIL_PASSWORD}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+                    ssl:
+                        trust: smtp.gmail.com
     data:
         mongodb:
-            uri: mongodb+srv://DiegoNighty2:ZqhyTF119pKa6NOe@dieg0cluster.qgsl4.mongodb.net/?retryWrites=true&w=majority
+            uri: ${MONGODB_URI}
             database: aurora
 aurora:
     mail-code-expiration: 10
@@ -22,3 +36,9 @@ aurora:
         access-token-expiration: 86400
         refresh-token-expiration: 2592000
         refresh-when-expiration-left: 604800
+
+mails:
+    verification-code:
+        subject: "School Royale - Código de verificación"
+        path: "mail/verification-code.html"
+

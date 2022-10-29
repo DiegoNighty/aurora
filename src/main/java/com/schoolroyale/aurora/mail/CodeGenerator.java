@@ -9,7 +9,7 @@ public class CodeGenerator {
     static final int CODE_LENGTH = 6;
 
     public static String generate() {
-        StringBuilder codeBuilder = new StringBuilder();
+        var codeBuilder = new StringBuilder();
 
         for (int i = 0; i < CODE_LENGTH; i++) {
             codeBuilder.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));

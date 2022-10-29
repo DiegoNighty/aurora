@@ -17,4 +17,8 @@ public class Time {
         return Duration.between(Time.now(), end);
     }
 
+    public static Duration betweenNow(Instant start) {
+        return Duration.between(start, Time.now());
+    }
+
 }

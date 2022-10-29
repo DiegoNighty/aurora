@@ -47,7 +47,7 @@ public class MailRouter {
             @RequestParam("code") String code,
             @AuthenticationPrincipal ApiUser apiUser
     ) {
-        MailResponse response = service.verifyCode(apiUser, code);
+        var response = service.verifyCode(apiUser, code);
 
         if (!response.success()) {
             return Mono.just(from(response));

@@ -7,7 +7,6 @@ import com.schoolroyale.aurora.mail.message.MailResponse;
 import com.schoolroyale.aurora.mail.sender.MailSenderService;
 import com.schoolroyale.aurora.mail.template.MailTemplate;
 import com.schoolroyale.aurora.mail.template.Placeholder;
-import com.schoolroyale.aurora.time.Expirable;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -39,13 +37,13 @@ public class VerificationCodeService {
         codes = ExpirableCache.of(new HashMap<>(), Duration.ofMinutes(expirationMinutes));
     }
 
-    public Mono<String> requestVerification(String mail, ApiUser apiUser) {
-        String code = CodeGenerator.generate();
+    public Mono<Void> requestVerification(String mail, ApiUser apiUser) {
+        var code = CodeGenerator.generate();
 
         codes.put(code, mail);
         pendingMails.put(apiUser.username(), mail);
 
-        return Mono.fromSupplier(() ->
+        return Mono.fromRunnable(() ->
                         mailSenderService.sendMail(
                                 mail,
                                 verificationCodeTemplate,
@@ -56,26 +54,26 @@ public class VerificationCodeService {
     }
 
     public MailResponse verifyCode(ApiUser apiUser, String code) {
-        String pendingMail = pendingMails.get(apiUser.username());
+        var pendingMail = pendingMails.get(apiUser.username());
 
         if (pendingMail == null) {
             return MailResponse.error("No pending verification");
         }
 
-        Optional<Expirable<String>> optionalMail = codes.getExpirable(code);
+        var optionalMail = codes.getExpirable(code);
 
         if (optionalMail.isEmpty()) {
             return MailResponse.error("Invalid code");
         }
 
-        Expirable<String> expirableMail = optionalMail.get();
+        var expirableMail = optionalMail.get();
 
         if (expirableMail.isExpired()) {
             clear(apiUser, code);
             return MailResponse.error("Code expired");
         }
 
-        String mail = expirableMail.getValue();
+        var mail = expirableMail.getValue();
 
         if (!mail.equals(pendingMail)) {
             return MailResponse.error("Invalid code");
